@@ -21,22 +21,19 @@ describe("postList", () => {
       name: "Ben",
       subject: "Food I like",
       comment: "I like ice-cream",
-      voteCount: 5,
-      timestamp: "09/13/2022",
+      voteCount: 5
     }, 
   2: {
       name: "Ryan",
       subject: "Game I like",
       comment: "I like warzone",
-      voteCount: 6,
-      timestamp: "09/13/2022",
+      voteCount: 6
     }, 
   3: {
       name: "Tom",
       subject: "Game I like",
       comment: "I like topwar",
-      voteCount: 6,
-      timestamp: "09/13/2022",
+      voteCount: 6
     }
   };
 
@@ -80,14 +77,12 @@ describe("postList", () => {
         subject: "Game I like",
         comment: "I like warzone",
         voteCount: 6,
-        timestamp: "09/13/2022",
       }, 
       3: {
         name: "Tom",
         subject: "Game I like",
         comment: "I like topwar",
         voteCount: 6,
-        timestamp: "09/13/2022",
       },
     });
   });
@@ -108,7 +103,46 @@ describe("postList", () => {
         timeOpen: timeOpen,
         id: id,
         formattedWaitTime: "4 minutes ago"
-      }
-    })
-  })
+      },
+    });
+  });
+  
+  test("should increase voteCount by 1", () => {
+    const {name, subject, comment, voteCount, timeOpen, formattedWaitTime, id} = postData;
+    action = {
+      type: c.UPVOTE,
+      voteCount: voteCount + 1,
+      id: id,
+    };
+    expect(postListReducer({ [id]:postData }, action)).toEqual({
+      [id]: {
+        name: name,
+        subject: subject,
+        comment: comment,
+        voteCount: voteCount + 1,
+        timeOpen: timeOpen,
+        formattedWaitTime: formattedWaitTime,
+        id: id,
+      },
+    });
+  });
+
+  test("should decrease voteCount by 1", () => {
+    const {name, subject, comment, voteCount, timeOpen, formattedWaitTime, id} = postData;
+    action = {
+      type: c.UPVOTE,
+      voteCount: voteCount - 1,
+      id: id,
+    };
+    expect(postListReducer({ [id]:postData}, action)).toEqual({
+      [id]: {
+        name: name,
+        subject: subject,
+        comment: comment,
+        voteCount: voteCount - 1,
+        timeOpen: timeOpen,
+        formattedWaitTime: formattedWaitTime,
+        id: id,
+      },
+  });
 });

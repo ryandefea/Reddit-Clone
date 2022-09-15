@@ -12,7 +12,11 @@ const PostList = (props) => {
           name = {post.name}
           subject = {post.subject}
           comment = {post.comment}
-          voteCount = {post.voteCount}
+          voteCount = {post.voteCount < 0 ? (
+            <h3 style={{ color: "red" }}>Vote Count: {post.voteCount}</h3>
+           ) : (
+            <h3 style={{ color: "black" }}>Vote Count: {post.voteCount}</h3>
+           )}
           formattedWaitTime={post.formattedWaitTime}
           id = {post.id}
           key = {post.id}

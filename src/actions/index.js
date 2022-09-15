@@ -1,15 +1,16 @@
 import * as c from "./ActionTypes"
 
 export const addPost = (post) => {
-  const {name, subject, comment, voteCount, timestamp, id} = post;
+  const {name, subject, comment, voteCount, timeOpen, formattedWaitTime, id} = post;
   return {
     type: c.ADD_POST,
     name: name,
     subject: subject,
     comment: comment,
     voteCount: voteCount,
-    timestamp: timestamp,
-    id: id,
+    timeOpen: timeOpen,
+    formattedWaitTime: formattedWaitTime,
+    id: id
   }
 }
 
@@ -22,4 +23,16 @@ export const updateTime = (id, formattedWaitTime) => ({
   type: c.UPDATE_TIME,
   id: id,
   formattedWaitTime: formattedWaitTime,
+});
+
+export const upvote = (id, voteCount) => ({
+  type: c.UPVOTE,
+  id: id,
+  voteCount: voteCount,
+});
+
+export const downvote = (id, voteCount) => ({
+  type: c.DOWNVOTE,
+  id: id,
+  voteCount: voteCount,
 });

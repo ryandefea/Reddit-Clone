@@ -21,7 +21,7 @@ class PostControl extends React.Component{
     componentDidMount() {
       this.waitTimeUpdateTimer = setInterval(
         () => this.updatePostElapsedWaitTime(),
-        1000
+        60000
       );
     }
 
@@ -52,14 +52,14 @@ class PostControl extends React.Component{
         formVisible: !prevState.formVisible,
         }));
       }
-    }
+    };
     
     handleAddingNewPostToList = (newPost) => {
       const { dispatch } = this.props;
       const action = a.addPost(newPost);
       dispatch(action);
       this.setState({formVisible: false});
-    }
+    };
 
     handleChangingSelectedPost = (id) => {
       const selectedPost = this.props.mainPostList[id];
@@ -82,7 +82,33 @@ class PostControl extends React.Component{
       const action = a.addPost(postToEdit);
       dispatch(action);
       this.setState({ editing: false, selectedPost: null });
-    }
+    };
+
+    handleClickUpvote = (id, voteCount) => {
+      const { dispatch } = this.props;
+      const upvoted = voteCount+1;
+      const action = a.upvote(id, upvoted);
+      dispatch(action);
+      console.log(this.props.mainPostList[id]);
+      const newSelectedPost = { 
+        ...this.props.mainPostList[id],
+        ...{ voteCount: voteCount + 1},
+      };
+      this.setState({ selectedPost: newSelectedPost });
+    };
+
+    handleClickDownvote = (id, voteCount) => {
+      const { dispatch } = this.props;
+      const downvoted = voteCount-1;
+      const action = a.downvote(id, downvoted);
+      dispatch(action);
+      console.log(this.props.mainPostList[id]);
+      const newSelectedPost = { 
+        ...this.props.mainPostList[id],
+        ...{ voteCount: voteCount - 1},
+      };
+      this.setState({ selectedPost: newSelectedPost });
+    };
 
     render(){
       let curVisibleState = null;
@@ -96,12 +122,15 @@ class PostControl extends React.Component{
         );
         buttonText = "Edit Post";
       } else if (this.state.selectedPost != null){
-        curVisibleState = 
+        curVisibleState = (
           <PostDetail 
             post={this.state.selectedPost}
             onClickingEdit={this.handleEditClick}
             onClickingDelete={this.handleDeletingPost}  
+            onClickingUpvote={this.handleClickUpvote}
+            onClickingDownvote={this.handleClickDownvote}
           />
+          );
         buttonText = "Return to Post List";
       } else if(this.state.formVisible){
         curVisibleState=<NewPostForm onNewPostCreation = {this.handleAddingNewPostToList}/>;
@@ -124,8 +153,14 @@ class PostControl extends React.Component{
 }
 
 const mapStateToProps = (state) => {
+  let sortedstate = {};
+  Object.keys(state)
+    .sort((a, b) => state[b].voteCount - state[a].voteCount)
+    .forEach((key) => {
+      sortedstate[key] = state[key];
+    });
   return {
-    mainPostList: state
+    mainPostList: sortedstate
   }
 }
 

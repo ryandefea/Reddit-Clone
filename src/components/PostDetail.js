@@ -2,16 +2,23 @@ import React from "react";
 import PropTypes from "prop-types";
 
 const PostDetail = (props) => {
-  const { post, onClickingDelete } = props;
+  const { post, onClickingDelete, onClickingUpvote, onClickingDownvote } = props;
   return(
       <React.Fragment>
       <h1>Details of {post.subject}</h1>
       <h3>{post.name}</h3>
-      <h3>{post.voteCount}</h3>
+      {/* <h3>{post.voteCount}</h3> */}
       <h3>{post.comment}</h3>
-      <h3>Time: {post.formattedWaitTime}</h3> 
+      <h3>Time: {post.formattedWaitTime}</h3>
+       {post.voteCount < 0 ? (
+        <h3 style={{ color: "red" }}>Vote Count: {post.voteCount}</h3>
+       ) : (
+        <h3 style={{ color: "black" }}>Vote Count: {post.voteCount}</h3>
+       )}
       <button onClick={props.onClickingEdit}>Update Post</button>
       <button onClick={() => onClickingDelete(post.id)}>Delete Post</button>
+      <button onClick={() => onClickingUpvote(post.id, post.voteCount)}>Upvote</button>
+      <button onClick={() => onClickingDownvote(post.id, post.voteCount)}>Downvote</button>
       </React.Fragment>
   );
 }
@@ -19,7 +26,9 @@ const PostDetail = (props) => {
 PostDetail.propTypes = {
   post: PropTypes.object,
   onClickingDelete: PropTypes.func,
-  onClickingEdit: PropTypes.func
+  onClickingEdit: PropTypes.func,
+  onClickingUpvote: PropTypes.func,
+  onClickingDownvote: PropTypes.func
 };
 
 export default PostDetail;

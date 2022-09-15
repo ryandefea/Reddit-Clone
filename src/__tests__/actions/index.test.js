@@ -9,8 +9,9 @@ describe("Reddit Clone actions", () => {
         subject: "Food I like",
         comment: "I like ice-cream",
         voteCount: 0,
-        timestamp: "09/13/2022",
-        id: 1,
+        timeOpen: 0,
+        formattedWaitTime: "less than a minute ago",
+        id: 1
       })
     ).toEqual({
       type: c.ADD_POST,
@@ -18,8 +19,9 @@ describe("Reddit Clone actions", () => {
       subject: "Food I like",
       comment: "I like ice-cream",
       voteCount: 0,
-      timestamp: "09/13/2022",
-      id: 1,
+      timeOpen: 0,
+        formattedWaitTime: "less than a minute ago",
+      id: 1
     });
   });
 
@@ -37,4 +39,20 @@ describe("Reddit Clone actions", () => {
       formattedWaitTime: "less than a minute ago",
     });
   });
+
+  it("upVote should create UPVOTE action", () => {
+    expect(a.upvote(1, 1)).toEqual({
+      type: c.UPVOTE,
+      id: 1,
+      voteCount: 1,
+    });
+  });
+
+  it("downVote should create DOWNVOTE action", () => {
+    expect(a.downvote(1, 1)).toEqual({
+      type: c.DOWNVOTE,
+      id: 1,
+      voteCount: 1,
+    })
+  })
 });
